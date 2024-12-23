@@ -10,4 +10,4 @@ urllib3==2.2.1
 
 # Optional but recommended
 colorama==0.4.6
-tqdm==4.66.2 
+tqdm==4.66.3 
