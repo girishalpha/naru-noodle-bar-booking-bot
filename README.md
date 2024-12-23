@@ -2,6 +2,8 @@
 
 An automated booking system for Eat Naru restaurant using Selenium WebDriver.
 
+## WIP - welcome contributors 
+
 ## Prerequisites
 
 - Python 3.x
