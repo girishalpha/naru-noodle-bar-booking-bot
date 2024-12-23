@@ -1,0 +1,13 @@
+# Core dependencies
+selenium==4.18.1
+webdriver-manager==4.0.1
+python-dotenv==1.0.1
+schedule==1.2.1
+
+# Utility packages
+requests==2.31.0
+urllib3==2.2.1
+
+# Optional but recommended
+colorama==0.4.6
+tqdm==4.66.2 
