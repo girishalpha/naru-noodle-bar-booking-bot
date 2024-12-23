@@ -6,7 +6,23 @@ An automated booking system for **Eat Naru** and other AirMenu-powered restauran
 
 ## Welcome Contributors 🎉
 ### WIP
-We are constantly enhancing this bot's functionality. Contributions are welcome to expand support for more booking platforms and features.
+Contributions are welcome to expand support for more booking platforms and features.
+
+
+This bot is currently designed for **Eat Naru**, but testing is only possible on Mondays. In the meantime, work is ongoing to adapt and test it for another AirMenu-powered site.
+
+- **Target Site**: Cafe Air Booking  
+- **Update `.env`**:  
+  ```env
+  BOOKING_URL=https://bookings.airmenus.in/CafeAir/CafeAir
+  ```
+
+Steps to adapt and test for the new site:
+
+1. Update the `BOOKING_URL` in the `.env` file with the URL of the new site.
+2. Modify XPath or CSS selectors in `booking_bot.py` to align with the new site's specific elements.
+3. Run the bot on the new site and document any discrepancies encountered during testing.
+
 
 ## Prerequisites
 
@@ -78,16 +94,6 @@ The bot automates the following steps:
 7. Accepts terms and conditions.
 8. Handles payment via the specified method (default: Amazon Pay Wallet).
 9. Confirms and logs booking details.
-
-
-
-## Error Handling
-
-- **Screenshots on Errors**: Saved to `screenshots/` for debugging.
-- **Error Logs**: Written to `booking_bot.log`.
-- **Console Messages**: Clear error explanations for user awareness.
-
-
 
 
 ## Notes
