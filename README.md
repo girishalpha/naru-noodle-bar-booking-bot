@@ -1,67 +1,94 @@
-# Eat Naru Booking Bot
+# Naru Noodle Bar / Cafe Air - Booking Bot
 
-An automated booking system for Eat Naru restaurant using Selenium WebDriver.
+Stealth booking bot using [Camoufox](https://camoufox.com) + Razorpay payment automation.
+Includes an **MCP server** so any AI (Claude, GPT, Gemini, etc.) can book for you.
 
-## Prerequisites
+## Quick Start (Interactive CLI)
 
-- Python 3.x
-- Chrome browser
-- Required Python packages (install via `pip install -r requirements.txt`):
-  - selenium-wire
-  - selenium
-  - webdriver-manager
-  - python-dotenv
-  - schedule
-
-## Setup
-
-1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Create a `.env` file with the following variables:
-
-
-BOOKING_URL=<restaurant booking URL>
-USER_NAME=<your name>
-USER_EMAIL=<your email>
-USER_PHONE=<10-digit phone number>
-GUESTS=<number of guests>
-MEAL_PREFERENCE=<LUNCH or DINNER>
-SLOT_PREFERENCE=<12:30, 14:30, 18:30, or 20:30>
-SEATING_PREFERENCE=RAMEN
-
+```bash
+pip install camoufox[geoip]
+camoufox fetch
+python booking_bot.py
 ```
 
-## Booking Process
+## MCP Server (for AI Agents)
 
-The bot automates the following steps:
+```bash
+pip install fastmcp camoufox[geoip]
+camoufox fetch
 
-1. Opens the booking URL at the specified time
-2. Scrolls down to access the booking calendar
-3. Selects the desired date
-4. Chooses seating preference:
-   - RAMEN BAR SEATING (₹1000, redeemable)
-   - TABLE options (₹5000, redeemable)
-5. Selects time slot and number of guests
-6. Fills in personal details:
-   - Name
-   - Email
-   - Phone number
-   - Special requests
-   - Accepts terms and conditions
-7. Handles payment via Amazon Pay wallet
+# Local (stdio - for Claude Desktop, Cursor, etc.)
+python mcp_server.py
 
-## Error Handling
+# Remote (SSE - for deployed servers)
+python mcp_server.py --sse --port 8080
+```
 
-- The bot saves screenshots on errors for debugging
-- Logs are written to `booking_bot.log`
-- Comprehensive error messages are displayed in the console
+### Connect to Claude Desktop
 
-## Notes
+Add to `claude_desktop_config.json`:
 
-- Maximum 3 guests for RAMEN BAR SEATING
-- Tables seat up to 4 guests
-- Booking amounts are fully redeemable against the food bill
+```json
+{
+  "mcpServers": {
+    "naru-booking": {
+      "command": "python",
+      "args": ["C:/path/to/mcp_server.py"]
+    }
+  }
+}
+```
 
-## Usage
+### Connect to Remote Server
 
-Run the bot:
+```json
+{
+  "mcpServers": {
+    "naru-booking": {
+      "url": "http://your-server:8080/sse"
+    }
+  }
+}
+```
+
+### Available MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `get_available_slots` | Returns valid slots, seating options, pricing |
+| `book_restaurant` | Full booking flow (date, seating, time, form, payment) |
+| `get_booking_status` | Check status of last booking attempt |
+
+### Example AI Conversation
+
+> "Book me a table at Naru for 2 people this Saturday at 8:30 PM"
+
+The AI will call `get_available_slots` to check options, then `book_restaurant` with your details.
+
+## Payment Handling
+
+- Auto-selects **Wallet > Amazon Pay** on Razorpay
+- If payment completes: returns `status: success`
+- If OTP needed: returns `status: partial` + `payment_url` for manual completion
+- If payment fails: returns screenshot path + URL
+
+## Files
+
+```
+booking_bot.py   - Interactive CLI bot (run manually)
+mcp_server.py    - MCP server (connect any AI)
+logs/            - Auto-created logs + error screenshots
+```
+
+## Deploy
+
+Works on any server with Python 3.10+:
+
+```bash
+# On your VPS/cloud instance:
+pip install fastmcp camoufox[geoip]
+camoufox fetch
+python mcp_server.py --sse --port 8080
+```
+
+Then point your AI client to `http://your-server:8080/sse`.
